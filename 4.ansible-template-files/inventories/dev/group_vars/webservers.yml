@@ -1,0 +1,5 @@
+http_root_dir: /var/www/html
+nginx_conf_dir: /etc/nginx/sites-available
+server:
+  name: example.com
+  port: 80

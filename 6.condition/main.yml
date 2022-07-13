@@ -1,0 +1,29 @@
+- name: Update web servers
+  hosts: webservers
+  become: yes
+
+  tasks:
+  - name: copy file test.txt to home directory
+    copy:
+      src: files/test.txt
+      dest: "{{ home_dir }}/test.txt"
+      owner: root
+      group: root
+      mode: 0644
+  
+  - name: line in file after commented line
+    lineinfile:
+      path: "{{ home_dir }}/test.txt"
+      regexp: 'before'
+      insertafter: '(.*lineinfile.*)'
+      line: 'here: after changed'
+
+  - name: block in file after commented line
+    blockinfile: 
+      path: "{{ home_dir }}/test.txt"
+      insertafter: '(.*blockinfile.*)'
+      block: |
+        here should be commented
+        hi !
+        this is great using ansbile to automate your task!
+        here should be commented

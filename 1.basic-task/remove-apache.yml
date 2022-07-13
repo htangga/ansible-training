@@ -1,0 +1,10 @@
+- name: Update web servers
+  hosts: webservers
+  become: yes
+
+  tasks:
+  # upgrade app
+  - name: Ensure apache is at the latest version
+    apt:
+      name: apache2
+      state: absent

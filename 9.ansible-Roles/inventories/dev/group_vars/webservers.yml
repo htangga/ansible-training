@@ -1,0 +1,11 @@
+nginx_conf_dir: /etc/nginx/sites-available
+servers:
+  - name: example.com
+    port: 80
+    http_root_dir: /var/www/html
+  - name: example2.com
+    port: 8000
+    http_root_dir: /var/www/html2
+  - name: example3.com
+    port: 8080
+    http_root_dir: /var/www/html3

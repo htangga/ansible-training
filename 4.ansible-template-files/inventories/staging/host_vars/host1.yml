@@ -1,0 +1,3 @@
+ansible_host: 10.0.7.50
+ansible_user: angga
+ansible_sudo_pass: diamdiamsaja

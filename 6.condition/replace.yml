@@ -1,0 +1,11 @@
+- name: Update web servers
+  hosts: webservers
+  become: yes
+
+  tasks:
+  - name: comment line "here should be commented"
+    replace:
+      path: "{{ home_dir }}/test.txt" 
+      regexp: '(.*should be commented.*)'
+      replace: '#\1'
+    when: ansible_host == "10.0.7.50" and ansible_facts['distribution'] == 'Ubuntu'

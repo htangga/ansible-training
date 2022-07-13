@@ -1,0 +1,39 @@
+- name: Update web servers
+  hosts: webservers
+  become: yes
+
+  tasks:
+  - name: Update apt-get repo and cache
+    apt: 
+      update_cache: yes 
+      force_apt_get: yes
+      cache_valid_time: 3600
+
+  - name: Ensure nginx is at the latest version
+    apt:
+      name: nginx
+      state: latest
+
+  - name: copy nginx virtual.conf template
+    template:
+      src: templates/virtualhost.conf.j2
+      dest: "{{ nginx_conf_dir }}/virtualhost.conf"
+      owner: root
+      group: root
+
+  - name: activate nginx config
+    command: "ln -s {{ nginx_conf_dir }}/virtualhost.conf /etc/nginx/sites-enabled/"
+
+  - name: copy index.html to http root directory
+    copy:
+      src: files/index.html
+      dest: "{{ http_root_dir }}/index.html"
+      owner: root
+      group: root
+    notify: restart nginx
+
+  handlers:
+  - name: restart nginx
+    service:
+      name: nginx
+      state: restarted

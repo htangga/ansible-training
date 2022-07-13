@@ -1,0 +1,4 @@
+# use lineinfile after this block
+here: before changed
+
+# use blockinfile after this block

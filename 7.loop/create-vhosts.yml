@@ -1,0 +1,44 @@
+- name: Update web servers
+  hosts: webservers
+  become: yes
+
+  tasks:
+  - name: create config files from template
+    template: 
+      src: templates/virtualhost.conf.j2
+      dest: "{{ nginx_conf_dir }}/{{ server.name }}.conf"
+      owner:
+      group:
+    loop: "{{ servers }}"
+    loop_control:
+      label: "{{ server.name }}"
+      loop_var: server
+  
+  - name: activate all virtualhost configs
+    file:
+      src: "{{ nginx_conf_dir }}/{{ server.name }}.conf"
+      dest: "/etc/nginx/sites-enabled/{{ server.name }}.conf"
+      state: link
+    loop: "{{ servers }}"
+    loop_control:
+      label: "{{ server.name }}"
+      loop_var: server
+
+  - name: copy index.html to http root directory
+    template:
+      src: templates/index.html.j2
+      dest: "{{ server.http_root_dir }}/index.html"
+      owner: www-data
+      group: www-data
+      mode: 0644
+    loop: "{{ servers }}"
+    loop_control:
+      label: "{{ server.name }}"
+      loop_var: server
+    notify: restart nginx
+
+  handlers:
+  - name: restart nginx
+    service:
+      name: nginx
+      state: restarted

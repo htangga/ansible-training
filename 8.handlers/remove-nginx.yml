@@ -1,0 +1,7 @@
+- name: Update web servers
+  hosts: webservers
+  become: yes
+
+  tasks:
+  - name: purge nginx
+    command: "sudo apt-get --purge autoremove nginx-* -y"

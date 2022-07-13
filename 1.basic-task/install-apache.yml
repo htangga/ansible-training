@@ -1,0 +1,17 @@
+- name: Update web servers
+  hosts: webservers
+  become: yes
+
+  tasks:
+  # upgrade app
+  - name: Ensure apache is at the latest version
+    apt:
+      name: apache2
+      state: latest
+
+  # execute bash command
+  - name: chenge directory to /usr/bin and then run apache2 command
+    command: "apache2 -v"
+    become: yes
+    args:
+      chdir: /usr/bin/
